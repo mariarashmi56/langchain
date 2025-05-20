@@ -1,0 +1,60 @@
+Vector databases are a hot topic right now, driven by the increasing popularity of artificial intelligence and machine learning applications. Many companies are continually raising money to develop their vector databases or to add vector search capabilities to their existing SQL or NoSQL databases.
+Today, there are a number of different vector databases available like chroma, weaviate, etc. You can check the landscape of vector databases below.
+
+Image Source: https://blog.det.life/why-you-shouldnt-invest-in-vector-databases-c0cd3f59d23c
+But some of you might be wondering, what is a vector database? And why do people keep talking about it?
+
+What is Vector Database?
+In a nutshell, a vector database (or we can call it a vector DB) is a specific kind of database that stores information (data) in the form of high-dimensional vector representations. This data could be anything like images, text, etc.
+
+You can imagine a vector database as a super-smart librarian who knows every book in the library. They also know how to organize all the books based on their themes and connections. It makes it easy for us when we want to find a book with specific topic.
+Essentially, a vector DB works like that but in the digital world. It can organize vast amounts of data points based on their similarity. This allows us to find information in semantic or contextual relevance rather than relying on exact matches or set criteria like conventional databases. For example, a vector DB can help us discover articles similar to another specific article. Or we can also combine vector DB with LLM to create robust Retrieval Augmented Generation (RAG) system (what do you think, should I write an article to explain about RAG?).
+Hmm, but how does this vector DB works? To answer this question, we need to understand several concept:
+Vector
+Embedding
+Similarity Score
+Okey, let’s start with vector!
+Vector
+I believe some of you are already familiar with vectors. It’s not a new concept, both Math and Physics have their own definitions of vectors. In physics, vector is a quantity that has both magnitude and direction. In math, we imagine vectors as a geometric entity that describe the magnitude and direction of something.
+To simplify, we can define a vector as a list of attributes of an object. For example, a house might have several features such as the number of bedrooms, bathrooms, area, sale price, etc. We can represent all these features as a vector, as illustrated in the picture below.
+
+You can imagine vector DB as a database that stores vectors that can describe something. And vector DB will define some relationship between vectors. Hmm, how vector DB create relationships between vectors? Before we discuss this, let’s talk about embedding first.
+Embedding
+Okay, let’s talk about embedding. It’s a common technique in NLP (Natural Language Processing) used to transform our text content into vectors that capture the meaning of words and sentences. Nowadays, there are several pre-trained embedding models available, such as those from OpenAI, Google, MetaAI, or the open-source community, that we can use. These models learn from a lot of text to map words into a multi-dimensional vector space. The location of a data point in the vector space tells us which words are related to each other.
+
+Let’s say, we have 10 sample sentences like this:
+text_chunks = [
+"Sunsets are breathtaking.",
+"Kindness is contagious.",
+"Laughter brings joy.",
+"Music is uplifting.",
+"Success is rewarding.",
+"Traffic jams are frustrating.",
+"Rainy days can be gloomy.",
+"Failure is disheartening.",
+"Mosquitoes are annoying.",
+"Colds are unpleasant."
+]
+We can use an embedding model to transform each sentence into a multi-dimensional vector. In this example, I used paraphrase-MiniLM-L6-v2, which transforms each sentence into a 34-dimensional vector. Next, we can use PCA to reduce the number of dimensions, allowing us to plot them into a two-dimensional graph, like this.
+
+As you can see, sentences with similar sentiments are close to each other. Yap, we can use the distance to identify sentences with similar meanings.
+But the next problem is, as humans, it’s relatively easy to identify points that are close together when plotted in a simple two-dimensional space. But how do we measure that in a vector space with hundreds and thousands of dimensions? This is where metric similarity scores come into play!
+Similarity Score
+In statistics, there are various metrics to measure the distance between vector or data points. Two commonly used metrics are Cosine and Euclidean. My favorite one is the cosine because I love my cousin (sorry for the silly joke hehehe).
+
+Image source: https://www.maartengrootendorst.com/blog/distances/
+In the cosine metric, we determine similarity by calculating the cosine value of the angle (θ) between two vectors. When the angle between two vectors is close to zero, the cosine value is close to 1. Conversely, if the angle is 90 degrees (referred to as orthogonal vectors in mathematics), the cosine value is zero.
+
+Image source: https://www.learndatasci.com/glossary/cosine-similarity/
+Yap, as you can see, we can use this metric to calculate similarity between sentence. For example,let’s consider a new sentence: ‘Rainy days make me sad”. If we want to find a sentence with a similar meaning from our existing list of sentences, calculating the cosine for each sentence provides values like these.
+
+As expected, ‘Rainy days can be gloomy’ is the most similar sentence to our new one. Both convey negative feelings about rain. On the other hand, ‘Success is rewarding’ yields the smallest cosine value, which makes sense as it expresses a positive sentiment.
+Yes, that is precisely our objective with the vector database, to rapidly identify similar entries. However, if we were to compare each vector to every other vector, the process would become significantly time-consuming, especially as the list of sentences grows. That’s why we need to find an efficient way to speed up the similarity search process.
+How to Speed up the Similarity Search?
+Vector database used several Approximate Nearest Neighbor algorithms to speed up the similarity search process. For example, Chroma supports multiple algorithms for storing and indexing high-dimensional vectors, including HNSW, IVFADC, and IVFPQ.
+Hierarchical Navigable Small World (HNSW): HNSW is an algorithm that constructs a hierarchical graph structure to index high-dimensional vectors. It can help us to quickly store and search high-dimensional vectors with minimal memory usage. You can check this vidio: HNSW for Vector Search Explained, if you want to know more about this algorithm.
+Inverted File with Approximate Distance Calculation (IVFADC): IVFADC utilizes an inverted index structure to index high-dimensional vectors. It is known for its fast search speed and ability to handle large-scale datasets.
+Inverted File with Product Quantization (IVFPQ): IVFPQ is an algorithm that uses product quantization to compress high-dimensional vectors before indexing. This results in a high-accuracy search capability, making it suitable for processing massive datasets..
+Alright, I believe that covers the essential aspects of the vector database. I hope this article can give you broader understanding of the vector database 😊.
+For the next article, let’s explore one of the open-source vector databases available. So, don’t forget to subscribe to receive notifications when I publish a new story. And feel free to connect with me on LinkedIn !
+Have a good day! 😁
